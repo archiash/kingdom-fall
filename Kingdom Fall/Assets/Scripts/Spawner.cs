@@ -24,7 +24,7 @@ public class Spawner : MonoBehaviour
 
     public void SpawnEnermy()
     {
-        Unit newEnermy = Instantiate(enermy);
+        Unit newEnermy = Instantiate(enermy,transform.position,Quaternion.identity);
         newEnermy.MoveToTarget(target);
     }
 }

@@ -6,19 +6,29 @@ public class Unit : MonoBehaviour
 {
     public float health;
     public float speed;
+    public float sightRange;
+    public float attackRange;
 
-    public Transform target;
-    
+    public Transform enermyBase;
+    public string enermyTag;
+    public Unit enermyTarget;
+
+    public bool onFollowPath = false;
+
+    [HideInInspector]
+    public List<Unit> enermyInMap = new List<Unit>();
+
     Vector3[] path;
     int targetIndex;
 
     public void MoveToTarget(Transform newTarget)
     {
-        target = newTarget;
+        enermyBase = newTarget;
 
-        if (target != null)
+        if (enermyBase != null)
         {
-            PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+            onFollowPath = true;
+            PathRequestManager.RequestPath(transform.position, enermyBase.position, OnPathFound);
         }
     }
 
@@ -37,9 +47,7 @@ public class Unit : MonoBehaviour
             path = newPath;
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
-        }
-            
-
+        }            
     }
 
     IEnumerator FollowPath()
@@ -53,6 +61,7 @@ public class Unit : MonoBehaviour
                 targetIndex++;
                 if(targetIndex >= path.Length)
                 {
+                    onFollowPath = false;
                     yield break;
                 }
                 currenttWayPoint = path[targetIndex];
@@ -62,6 +71,32 @@ public class Unit : MonoBehaviour
         }
     }
 
+    public void UpdateTarget()
+    {
+        GameObject[] enermies = GameObject.FindGameObjectsWithTag(enermyTag);
+        float dstToNearet = Mathf.Infinity;
+        GameObject nearestEnermy = null;
+
+        foreach (var enermy in enermies)
+        {
+            float dstToEnermy = Vector3.Distance(transform.position, enermy.transform.position);
+            if (dstToEnermy < dstToNearet)
+            {
+                dstToNearet = dstToEnermy;
+                nearestEnermy = enermy;
+            }
+        }
+
+        if (nearestEnermy != null && dstToNearet < sightRange)
+        {
+            onFollowPath = false;
+            enermyTarget = nearestEnermy.GetComponent<Unit>();
+            if(enermyTarget.enermyTarget == null)
+            {
+                enermyTarget.enermyTarget = this;
+            }
+        }
+    }
     public void OnDrawGizmos()
     {
         if(path != null)
@@ -81,3 +116,4 @@ public class Unit : MonoBehaviour
         }
     }
 } 
+
