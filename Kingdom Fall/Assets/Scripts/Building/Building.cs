@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
-    public Building currentBuilding; 
+    public bool buildable = true; 
 }

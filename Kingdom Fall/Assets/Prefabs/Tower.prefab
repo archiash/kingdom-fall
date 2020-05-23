@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0d5edfaa50f5f49b7d1f31fe03603b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentBuilding: {fileID: 0}
+  currentBuilding: {fileID: 4432436553291428576}
   arrow: {fileID: 6424740056986025400, guid: 2d32139d8b3ae2848be6347427767894, type: 3}
   range: 2.5
   damage: 6

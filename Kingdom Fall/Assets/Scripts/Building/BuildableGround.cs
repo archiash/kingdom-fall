@@ -12,11 +12,11 @@ public class BuildableGround : MonoBehaviour
         Debug.Log("2");
         if(Input.GetMouseButtonDown(0))
         {
-            if (building.currentBuilding == null)
+            if (building.buildable)
             {
                 Destroy(building.gameObject);
                 building = Instantiate(towerToBuild,transform.position,Quaternion.identity,transform);
-                building.currentBuilding = building;
+                building.buildable = false;
             }
 
 
