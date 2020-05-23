@@ -6,8 +6,12 @@ public class Unit : MonoBehaviour
 {
     public float health;
     public float speed;
+    public float turnDst = 2f;
     public float sightRange;
+
     public float attackRange;
+    public float attackDamage;
+    public float attackSpeed;
 
     public Transform enermyBase;
     public string enermyTag;
@@ -23,12 +27,10 @@ public class Unit : MonoBehaviour
 
     public void MoveToTarget(Transform newTarget)
     {
-        enermyBase = newTarget;
-
-        if (enermyBase != null)
-        {
+        if (newTarget != null)
+        {         
             onFollowPath = true;
-            PathRequestManager.RequestPath(transform.position, enermyBase.position, OnPathFound);
+            PathRequestManager.RequestPath(transform.position, newTarget.position, OnPathFound);
         }
     }
 
@@ -44,6 +46,7 @@ public class Unit : MonoBehaviour
     {
         if (pathSuccessful)
         {
+            targetIndex = 0;
             path = newPath;
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
@@ -52,9 +55,8 @@ public class Unit : MonoBehaviour
 
     IEnumerator FollowPath()
     {
-        Vector3 currenttWayPoint = path[0];
-
-        while(true)
+        Vector3 currenttWayPoint = path[0];        
+        while (true)
         {
             if(transform.position == currenttWayPoint)
             {
@@ -69,6 +71,15 @@ public class Unit : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, currenttWayPoint, speed * Time.deltaTime);
             yield return null;
         }
+    }
+
+    public bool IsEnermyBase()
+    {
+        if(Vector2.Distance(transform.position,enermyBase.position) < 0.1f)
+        {
+            return true;
+        }
+        return false;
     }
 
     public void UpdateTarget()
@@ -86,7 +97,7 @@ public class Unit : MonoBehaviour
                 nearestEnermy = enermy;
             }
         }
-
+        
         if (nearestEnermy != null && dstToNearet < sightRange)
         {
             onFollowPath = false;

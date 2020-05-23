@@ -6,8 +6,20 @@ using UnityEditor;
 public class Villager : Unit
 {
 
+    float nextAttack = 0f;
     void Update()
     {
+
+        if (health <= 0)
+        {
+            Destroy(this.gameObject);
+        }
+
+        if (nextAttack < 1)
+        {
+            nextAttack += Time.deltaTime * attackSpeed;
+        }
+
         if (enermyTarget != null)
         {
             if (Vector3.Distance(transform.position, enermyTarget.transform.position) < sightRange)
@@ -15,16 +27,22 @@ public class Villager : Unit
                 if (Vector3.Distance(transform.position, enermyTarget.transform.position) < attackRange)
                 {
                     StopCoroutine("FollowPath");
-                    Debug.Log("Attack");
+                    onFollowPath = false;
+                    if (nextAttack >= 1)
+                    {
+                        enermyTarget.health -= attackDamage;
+                        nextAttack = 0f;
+                    }
+
                 }
                 else if (Vector3.Distance(transform.position, enermyTarget.transform.position) > attackRange)
                 {
-                    if (!onFollowPath)
+                    if(!onFollowPath)
                     {
                         MoveToTarget(enermyTarget.transform);
-                        onFollowPath = true;
                     }
-
+                        
+                   
                 }
 
             }
@@ -36,8 +54,16 @@ public class Villager : Unit
 
         if (enermyTarget == null)
         {
-            if (!onFollowPath) ;
-                
+            if (!onFollowPath && !IsEnermyBase())
+            {
+                MoveToTarget(enermyBase);
+            }
+
+
+            if (IsEnermyBase())
+            {
+                Destroy(gameObject);
+            }
 
             UpdateTarget();
         }

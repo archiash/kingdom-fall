@@ -98,8 +98,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 10
   speed: 0.5
+  turnDst: 2
   sightRange: 1.46
   attackRange: 0.5
+  attackDamage: 3
+  attackSpeed: 1
   enermyBase: {fileID: 0}
   enermyTag: Enermy
   enermyTarget: {fileID: 0}

@@ -5,12 +5,19 @@ using UnityEngine;
 
 public class Orc : Unit
 {
+
+    float nextAttack = 0f;
     void Update()
     {
 
         if (health <= 0)
         {
             Destroy(this.gameObject);
+        }
+
+        if (nextAttack < 1)
+        {
+            nextAttack += Time.deltaTime * attackSpeed;
         }
 
         if (enermyTarget != null)
@@ -20,7 +27,13 @@ public class Orc : Unit
                 if (Vector3.Distance(transform.position, enermyTarget.transform.position) < attackRange)
                 {
                     StopCoroutine("FollowPath");
-                    Debug.Log("Attack");
+                    onFollowPath = false;
+                    if (nextAttack >= 1)
+                    {                       
+                        enermyTarget.health -= attackDamage;
+                        nextAttack = 0f;
+                    }
+
                 }
                 else if (Vector3.Distance(transform.position, enermyTarget.transform.position) > attackRange)
                 {
@@ -41,8 +54,13 @@ public class Orc : Unit
 
         if (enermyTarget == null)
         {
-            if(!onFollowPath)
+            if(!onFollowPath && !IsEnermyBase())
                 MoveToTarget(enermyBase);
+
+            if(IsEnermyBase())
+            {
+                Destroy(gameObject);
+            }
 
             UpdateTarget();
         }

@@ -7,14 +7,14 @@ public class Spawner : MonoBehaviour
     public Transform target;
     public Unit enermy;
 
-    public float spawnRate;
+    public float spawnSpeed;
     float nextSpawn = 0f;
 
     public void Update()
     {
         if(nextSpawn < 1)
         {
-            nextSpawn += Time.deltaTime * spawnRate;
+            nextSpawn += Time.deltaTime * spawnSpeed;
         }else if(nextSpawn >= 1)
         {
             nextSpawn = 0f;
@@ -25,6 +25,6 @@ public class Spawner : MonoBehaviour
     public void SpawnEnermy()
     {
         Unit newEnermy = Instantiate(enermy,transform.position,Quaternion.identity);
-        newEnermy.MoveToTarget(target);
+        newEnermy.enermyBase = target;
     }
 }

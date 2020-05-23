@@ -32,7 +32,8 @@ public class Pathfinding : MonoBehaviour
         Node startNode = grid.NodeFromWorldPoint(startPos);
         Node targetNode = grid.NodeFromWorldPoint(targetPos);
 
-        if(startNode.walkable && targetNode.walkable)
+        //startNode.walkable && 
+        if (targetNode.walkable)
         { 
             Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
             HashSet<Node> closetSet = new HashSet<Node>();
@@ -59,7 +60,7 @@ public class Pathfinding : MonoBehaviour
                     {
                         continue;
                     }
-                    int newMoventCostToNeighhbour = currentNode.gCost + GetDistance(currentNode, neighbour);
+                    int newMoventCostToNeighhbour = currentNode.gCost + GetDistance(currentNode, neighbour) + neighbour.movementPenalty;
                     if (newMoventCostToNeighhbour < neighbour.gCost || !openSet.Contains(neighbour))
                     {
                         neighbour.gCost = newMoventCostToNeighhbour;

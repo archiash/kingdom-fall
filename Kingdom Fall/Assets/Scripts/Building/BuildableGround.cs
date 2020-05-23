@@ -9,7 +9,8 @@ public class BuildableGround : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if(Input.GetMouseButtonUp(0))
+        Debug.Log("2");
+        if(Input.GetMouseButtonDown(0))
         {
             if (building.currentBuilding == null)
             {
